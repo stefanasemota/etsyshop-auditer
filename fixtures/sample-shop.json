@@ -1,0 +1,125 @@
+{
+  "shop": {
+    "shop_id": 48291044,
+    "shop_name": "AlpineWalnutCraft",
+    "title": "Handcrafted Walnut Kitchen & Home Goods",
+    "announcement": "Free shipping on orders over $75! Custom laser engraving included.",
+    "is_vacation": false,
+    "about": {
+      "story_headline": "Small-batch woodworking from our Zurich studio",
+      "story": "Every board and tray is milled from sustainably harvested hardwood, hand-sanded to 400 grit, and finished with organic beeswax.",
+      "has_photos": true,
+      "has_video": true,
+      "members": [
+        { "name": "Stephan", "role": "Founder & Maker" }
+      ]
+    },
+    "policies": {
+      "has_shipping_policy": true,
+      "has_return_policy": true,
+      "has_faq": true,
+      "accepts_returns": true
+    }
+  },
+  "listings": [
+    {
+      "listing_id": 1009001,
+      "shop_id": 48291044,
+      "state": "active",
+      "title": "Cutting Board Wood Gift",
+      "description": "Nice handmade cutting board made from walnut wood. Great for gifts.",
+      "price": { "amount": 6800, "divisor": 100, "currency_code": "USD" },
+      "quantity": 12,
+      "taxonomy_id": 1042,
+      "tags": [
+        "wood",
+        "board",
+        "kitchen",
+        "gift",
+        "walnut"
+      ],
+      "materials": [
+        "walnut",
+        "beeswax",
+        "mineral oil"
+      ],
+      "image_count": 3,
+      "has_video": false,
+      "attributes": {
+        "primary_color": "Brown"
+      }
+    },
+    {
+      "listing_id": 1009002,
+      "shop_id": 48291044,
+      "state": "active",
+      "title": "Magnetic Knife Holder Wall Mount, Walnut Wood Knife Strip for Kitchen Organization",
+      "description": "Keep your chef knives accessible with our solid American walnut magnetic knife strip. Embedded rare-earth neodymium magnets hold up to 8 heavy kitchen knives securely without scratching blades.\n\n• DIMENSIONS: 16\" x 2.5\" x 0.85\"\n• MOUNTING: Includes hidden keyhole brackets + drywall anchors",
+      "price": { "amount": 5400, "divisor": 100, "currency_code": "USD" },
+      "quantity": 8,
+      "taxonomy_id": 1045,
+      "tags": [
+        "magnetic knife strip",
+        "walnut knife holder",
+        "wall knife rack",
+        "kitchen organization",
+        "chef gift idea",
+        "wooden knife block",
+        "magnetic tool bar",
+        "modern kitchen decor",
+        "housewarming gift",
+        "custom knife strip"
+      ],
+      "materials": [
+        "black walnut",
+        "neodymium magnets",
+        "tung oil"
+      ],
+      "image_count": 6,
+      "has_video": false,
+      "attributes": {
+        "primary_color": "Brown",
+        "style": "Mid-century",
+        "occasion": "Housewarming"
+      }
+    },
+    {
+      "listing_id": 1009003,
+      "shop_id": 48291044,
+      "state": "active",
+      "title": "Personalized Espresso Tamper Station, Walnut Coffee Bar Organizer & Barista Gift, Custom Tamping Mat",
+      "description": "Personalized walnut espresso tamper station handcrafted for 54mm and 58mm portafilters—an ergonomic coffee bar organizer and custom gift for home baristas and coffee lovers.\n\n• DIMENSIONS: 9.5\" x 6.0\" x 2.2\" solid black walnut\n• COMPATIBILITY: Fits 51mm, 54mm (Breville), and 58mm commercial portafilters, distributor, tamper & puck screen\n• FINISH: Water-resistant organic tung oil finish with non-slip silicone feet\n• CARE & SHIPPING: Wipe clean with a damp cloth; ships within 2 business days.",
+      "price": { "amount": 7900, "divisor": 100, "currency_code": "USD" },
+      "quantity": 15,
+      "taxonomy_id": 1048,
+      "tags": [
+        "espresso station",
+        "walnut tamping base",
+        "coffee bar organizer",
+        "barista gift idea",
+        "portafilter holder",
+        "58mm tamper stand",
+        "54mm coffee station",
+        "custom coffee gift",
+        "espresso accessories",
+        "wood tamper mat",
+        "home cafe decor",
+        "coffee lover present",
+        "engraved barista box"
+      ],
+      "materials": [
+        "american black walnut",
+        "silicone feet",
+        "organic tung oil"
+      ],
+      "image_count": 9,
+      "has_video": true,
+      "attributes": {
+        "primary_color": "Brown",
+        "secondary_color": "Black",
+        "style": "Minimalist",
+        "occasion": "Anniversary"
+      }
+    }
+  ]
+}

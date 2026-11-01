@@ -23,7 +23,7 @@
   - Approved Approach C (Pragmatic Balance) + 100-Point Audit Rubric + Atomic JSON Patch Schema and logged ADR in `decision.md` (`[01.11.2026]`).
 - [ ] **Phase 5: Incremental FDD Implementation (`aos-vibecode`)**
   - [x] FDD-1: `Scaffold standardized metadata and plugin manifest for an etsyshop-auditer repository`
-  - FDD-2: `Validate Etsy listing and shop payloads against a strict schema for an audit engine`
+  - [x] FDD-2: `Validate Etsy listing and shop payloads against a strict schema for an audit engine`
   - FDD-3: `Authenticate OAuth 2.0 PKCE sessions and cache batched requests for an Etsy v3 API client`
   - FDD-4: `Calculate rubric scores and constraint violations of an Etsy shop catalog`
   - FDD-5: `Generate and validate atomic JSON patches for an Etsy listing optimization`

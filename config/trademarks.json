@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "description": "Configurable trademark & Etsy prohibited-term ruleset checked during listing audit and patch verification.",
+  "trademarks": [
+    "disney",
+    "marvel",
+    "star wars",
+    "harry potter",
+    "nintendo",
+    "pokemon",
+    "pikachu",
+    "chanel",
+    "gucci",
+    "louis vuitton",
+    "rolex",
+    "barbie",
+    "lego",
+    "sanrio",
+    "hello kitty",
+    "taylor swift",
+    "nfl",
+    "nba",
+    "fifa",
+    "olympics",
+    "velcro",
+    "onesie",
+    "stanley cup"
+  ],
+  "prohibited_policy_terms": [
+    "ivory",
+    "cuban cigar",
+    "prescription drug",
+    "mystery box",
+    "raffle ticket"
+  ]
+}
