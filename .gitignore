@@ -1,0 +1,17 @@
+# Environment & Secrets
+.env
+.env.*
+*.pem
+*service-account*.json
+*key*.json
+
+# Dependencies & Build Artifacts
+node_modules/
+.turbo/
+dist/
+.next/
+coverage/
+
+# Local Etsy API & OAuth Cache
+.cache/
+.DS_Store

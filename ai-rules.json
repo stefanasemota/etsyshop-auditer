@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "aos-vibe-coding-guardrail-rules",
+  "version": "1.0.0",
+  "style": {
+    "noAiSlop": true,
+    "tone": "concise, direct, technical, zero filler words"
+  },
+  "gitStrategy": {
+    "neverWorkOnMain": true,
+    "protectedBranches": ["main", "master", "development"],
+    "branchPrefixes": ["feature/", "fix/", "chore/"],
+    "testOnBranchBeforePush": true,
+    "pushDoNotMerge": true,
+    "requireDraftPullRequest": true
+  },
+  "executionDiscipline": {
+    "verifyBaselineBeforeWriting": "Read existing code and run build/test commands before making edits.",
+    "lookBeforeYouLeap": "Always run find or grep to check if a utility function or component already exists before writing a new one from scratch.",
+    "dependencyLockdown": "Never install new npm packages or pip libraries without explicit human approval first. Rely on existing dependencies whenever possible.",
+    "fixYourOwnBugs": "If a command, build, linter, or test fails after an edit, iterate and fix it autonomously before declaring the task done.",
+    "documentationSync": "If a code change alters an API endpoint, environment variable, or setup step, update README.md, dev.md, or API documentation in the same commit.",
+    "commitAtomicity": "Make small, logical commits with clear descriptions as you progress through the feature rather than one massive commit at the end.",
+    "explainTheFix": "When resolving a bug, write a concise summary in the commit message explaining why the bug happened and how your change fixed it."
+  },
+  "conventionalCommits": {
+    "pattern": "^(feat|fix|docs|chore|refactor|test|style|perf)(\\([a-z0-9-]+\\))?: .+$",
+    "allowedTypes": ["feat", "fix", "docs", "chore", "refactor", "test", "style", "perf"],
+    "rejectedMessages": ["updated code", "changes", "WIP"]
+  }
+}
