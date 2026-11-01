@@ -16,32 +16,36 @@ function escapeHtml(str) {
 function renderStepConnect(session = {}) {
   return `
   <section class="wizard-card">
-    <h2>Step 1: Connect Your Etsy Shop</h2>
-    <p class="muted">audit your real listings immediately using <strong>Etsy CSV Import</strong> (no API key approval needed), or connect via <strong>Etsy OAuth 2.0</strong> once your Etsy API key is active.</p>
+    <h2>Step 1: Connect Your Shop</h2>
+    <p class="muted">Import your downloaded <strong>Etsy Listings CSV</strong> right below (no API key needed), or connect via <strong>Etsy OAuth 2.0</strong> once your API key is active.</p>
 
     <form method="POST" action="/oauth/import-csv" class="stack-form" style="margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid rgba(255,255,255,0.12);">
-      <h3 style="margin:0;font-size:1rem;">Option A: Import Your Real Etsy Shop CSV (No API Key Needed)</h3>
+      <h3 style="margin:0;font-size:1rem;">Option A: Import Etsy Listings CSV (No API Key Needed)</h3>
       <small class="muted">In Etsy: <em>Shop Manager &rarr; Settings &rarr; Options &rarr; Download Data &rarr; Currently for Sale Listings CSV</em></small>
       <label>
-        <span>Shop Name</span>
-        <input type="text" name="shop_name" placeholder="e.g. MyEtsyShop" required />
+        <span>Your Shop Name</span>
+        <input type="text" name="shop_name" placeholder="e.g. MyShopName" required />
       </label>
       <label>
-        <span>Paste Your Etsy Listings CSV Content</span>
-        <textarea name="csv_text" rows="4" placeholder="TITLE,DESCRIPTION,PRICE,CURRENCY_CODE,QUANTITY,TAGS,MATERIALS..." style="padding:0.65rem;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.25);color:inherit;font-family:monospace;font-size:0.82rem;" required></textarea>
+        <span>Select Your Downloaded Etsy CSV File</span>
+        <input type="file" id="csv_file_picker" accept=".csv,text/csv" onchange="const f=this.files[0];if(f){const r=new FileReader();r.onload=(e)=>{document.getElementById('csv_text_area').value=e.target.result;};r.readAsText(f);}" />
       </label>
-      <button type="submit" class="btn-primary">Import My Etsy CSV &amp; Run Audit &rarr;</button>
+      <label>
+        <span>Or Paste CSV Content Directly</span>
+        <textarea id="csv_text_area" name="csv_text" rows="3" placeholder="TITLE,DESCRIPTION,PRICE,CURRENCY_CODE,QUANTITY,TAGS,MATERIALS..." style="padding:0.65rem;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.25);color:inherit;font-family:monospace;font-size:0.82rem;" required></textarea>
+      </label>
+      <button type="submit" class="btn-primary">Import Etsy Listings CSV &amp; Run Audit &rarr;</button>
     </form>
 
     <form method="POST" action="/oauth/demo" style="margin-bottom:1.5rem;">
-      <button type="submit" class="btn-secondary">Or Try With Sample Etsy Shop (Demo Mode) &rarr;</button>
+      <button type="submit" class="btn-secondary">Or Try With Sample Shop (Demo Mode) &rarr;</button>
     </form>
 
     <details style="margin-top:0.5rem;">
-      <summary style="cursor:pointer;font-weight:600;color:var(--muted);">Option B: Connect with Etsy OAuth 2.0 (Requires Approved Active Etsy API Key)</summary>
+      <summary style="cursor:pointer;font-weight:600;color:var(--muted);">Option B: Connect with Etsy OAuth 2.0 (Once API Key is Approved)</summary>
       <form method="POST" action="/oauth/connect" class="stack-form" style="margin-top:0.75rem;">
         <label>
-          <span>Etsy App Keystring (Client ID — must be Active, not Pending Review)</span>
+          <span>Etsy App Keystring (Client ID)</span>
           <input type="text" name="client_id" value="${escapeHtml(session.clientId || '')}" placeholder="e.g. a1b2c3d4e5f6g7h8i9j0..." required />
         </label>
         <label>
@@ -173,7 +177,7 @@ export function renderDashboardHtml({
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>etsyshop-auditer: ${escapeHtml(auditReport.shop_name)}</title>
+  <title>shoplistingauditer: ${escapeHtml(auditReport.shop_name)}</title>
   <style>
     :root { color-scheme: light dark; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --muted: #94a3b8; --accent: #f1641e; --ok: #10b981; }
     body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 1.25rem; background: var(--bg); color: var(--text); line-height: 1.5; }
@@ -212,7 +216,7 @@ export function renderDashboardHtml({
   <main class="container">
     <header class="topbar">
       <div>
-        <strong style="font-size:1.15rem;">🛍️ etsyshop-auditer</strong>
+        <strong style="font-size:1.15rem;">🛍️ shoplistingauditer</strong>
         ${session.connected ? `<span class="muted"> &bull; Connected: ${escapeHtml(auditReport.shop_name)}</span>` : ''}
       </div>
       <nav class="steps">

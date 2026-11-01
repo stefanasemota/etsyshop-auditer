@@ -37,7 +37,7 @@ export function runCli(argv = process.argv.slice(2)) {
     const port = Number(process.env.PORT || 4321);
     const server = createDashboardServer({ client, defaultStrategy: strategy });
     server.listen(port, () => {
-      console.log(`🛍️ etsyshop-auditer Preview Diff Dashboard running at http://localhost:${port}`);
+      console.log(`🛍️ shoplistingauditer Preview Diff Dashboard running at http://localhost:${port}`);
     });
     return { command, port, server };
   }

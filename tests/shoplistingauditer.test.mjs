@@ -16,7 +16,7 @@ import { generateCatalogPatches, generateListingPatch } from '../src/optimizer/p
 import { EtsyClient, buildAuthorizationUrl, generatePkcePair } from '../src/api/etsy-client.mjs';
 import { importEtsyCsvToShopPayload } from '../src/api/csv-importer.mjs';
 import { renderDashboardHtml } from '../src/server/dashboard.mjs';
-import { runCli } from '../bin/etsyshop-auditer.mjs';
+import { runCli } from '../bin/shoplistingauditer.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -27,8 +27,8 @@ test('1. Repository scaffolding, plugin.json, README badges/footer, and decision
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
   const decision = fs.readFileSync(path.join(ROOT, 'decision.md'), 'utf8');
 
-  assert.equal(pkg.name, 'etsyshop-auditer');
-  assert.equal(plugin.name, 'etsyshop-auditer');
+  assert.equal(pkg.name, 'shoplistingauditer');
+  assert.equal(plugin.name, 'shoplistingauditer');
   assert.equal(pkg.version, plugin.version);
   assert.ok(fs.existsSync(path.join(ROOT, '.agent/skills/etsy-optimizer/SKILL.md')));
   assert.ok(fs.existsSync(path.join(ROOT, 'skills/etsy-optimizer/SKILL.md')));
@@ -152,8 +152,8 @@ test('6. Dashboard HTML renderer and CLI commands execute cleanly', () => {
     step: 1,
     session: { connected: false }
   });
-  assert.match(htmlStep1, /Step 1: Connect Your Etsy Shop/);
-  assert.match(htmlStep1, /Import My Etsy CSV &amp; Run Audit/);
+  assert.match(htmlStep1, /Step 1: Connect Your Shop/);
+  assert.match(htmlStep1, /Import Etsy Listings CSV &amp; Run Audit/);
 
   const csvPayload = importEtsyCsvToShopPayload(
     'TITLE,DESCRIPTION,TAGS,MATERIALS,IMAGE1\n"Handmade Ceramic Mug","Coffee mug description","mug,coffee","stoneware,glaze","https://example.com/1.jpg"',

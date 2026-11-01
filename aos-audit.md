@@ -1,6 +1,6 @@
 # 🏗️ AOS Project Architecture & Guardrail Audit Report (`aos-audit.md`)
 
-- **Repository:** `etsyshop-auditer`
+- **Repository:** `shoplistingauditer`
 - **Audit Date:** `01.11.2026`
 - **Engine Profile:** `antigravity` (`profile-antigravity.md`)
 - **Overall Status:** ✅ **PASS (100% Compliant)**

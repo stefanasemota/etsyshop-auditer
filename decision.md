@@ -4,6 +4,12 @@ Reverse-chronological ledger (newest at top, oldest at bottom) of all architectu
 
 ---
 
+### [01.11.2026] - Rename Project & GitHub Repository to `shoplistingauditer` and Add File Picker CSV Importer
+- **Origin:** Human Request
+- **Context:** Etsy's Developer Portal rejects application names containing the restricted trademark `"etsy"`, and new Etsy API keys require manual approval before OAuth is active.
+- **Decision:** Renamed the project, CLI (`bin/shoplistingauditer.mjs`), package/plugin manifests, local directory (`/Users/aostefan/Developer/shoplistingauditer`), and GitHub repository (`stefanasemota/shoplistingauditer`) to `shoplistingauditer`, and added a file-picker + text CSV importer on Step 1 (`src/api/csv-importer.mjs`) so shop owners can audit real listings without waiting on API key approval.
+- **Impact:** `package.json`, `plugin.json`, `bin/shoplistingauditer.mjs`, `src/api/csv-importer.mjs`, `src/server/dashboard.mjs`, `tests/shoplistingauditer.test.mjs`, `README.md`, `decision.md`.
+
 ### [01.11.2026] - Implement 3-Step Guided OAuth Wizard UX & Move Repository to `/Users/aostefan/Developer/etsyshop-auditer`
 - **Origin:** Human Request | Agent Proposal
 - **Context:** Opening the dashboard directly to a dense wall of technical diffs was overwhelming; the user requested a clear 3-step guided flow (`1. Connect Your Shop` via Etsy OAuth 2.0 or Demo Mode &rarr; `2. Audit Shop Overview` &rarr; `3. Propose & Apply Optimizations`) and moved the project to `/Users/aostefan/Developer/etsyshop-auditer`.
