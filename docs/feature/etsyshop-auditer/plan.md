@@ -27,7 +27,7 @@
   - [x] FDD-3: `Authenticate OAuth 2.0 PKCE sessions and cache batched requests for an Etsy v3 API client`
   - [x] FDD-4: `Calculate rubric scores and constraint violations of an Etsy shop catalog`
   - [x] FDD-5: `Generate and validate atomic JSON patches for an Etsy listing optimization`
-  - FDD-6: `Render side-by-side preview diffs and approval controls for a shop owner dashboard`
+  - [x] FDD-6: `Render side-by-side preview diffs and approval controls for a shop owner dashboard`
   - FDD-7: `Orchestrate the 7-phase Etsy shop optimization workflow by an Antigravity skill`
 - [ ] **Phase 6: Automated Quality & Security Review (`aos-verify` & `aos-check-for-security-issues` — MANDATORY GATE)**
   - Validate zero-warning lint/typecheck, unit & integration tests, secret scanning, and PKCE/API safety.
