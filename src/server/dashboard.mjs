@@ -23,8 +23,8 @@ function renderStepConnect(session = {}) {
         <input type="text" name="client_id" value="${escapeHtml(session.clientId || '')}" placeholder="e.g. a1b2c3d4e5f6g7h8i9j0..." required />
       </label>
       <label>
-        <span>Your Etsy Shop ID (Numeric ID)</span>
-        <input type="text" name="shop_id" value="${escapeHtml(session.shopId || '')}" placeholder="e.g. 48291044" required />
+        <span>Your Etsy Shop Name or URL (Optional — auto-detected on login)</span>
+        <input type="text" name="shop_input" value="${escapeHtml(session.shopInput || session.shopName || '')}" placeholder="e.g. MyShopName or https://www.etsy.com/shop/MyShopName" />
       </label>
       <button type="submit" class="btn-primary">Connect Your Shop with Etsy OAuth &rarr;</button>
     </form>
@@ -241,9 +241,9 @@ export function createDashboardServer({ client = new EtsyClient(), defaultStrate
     if (req.method === 'POST' && reqUrl.pathname === '/oauth/connect') {
       const body = await parseFormBody(req);
       const clientId = String(body.client_id || client.clientId || '').trim();
-      const shopId = Number(body.shop_id || 48291044);
+      const shopInput = String(body.shop_input || body.shop_id || '').trim();
       const pkce = generatePkcePair();
-      client.saveSession({ connected: false, mode: 'live', clientId, shopId, pkce });
+      client.saveSession({ connected: false, mode: 'live', clientId, shopInput, pkce });
       const authUrl = buildAuthorizationUrl({
         clientId,
         state: pkce.state,
@@ -263,7 +263,7 @@ export function createDashboardServer({ client = new EtsyClient(), defaultStrate
           codeVerifier: session.pkce.codeVerifier,
           clientId: session.clientId
         });
-        await client.syncLiveShop(session.shopId || 48291044);
+        await client.syncLiveShop(session.shopInput || '');
       }
       res.writeHead(303, { Location: '/?step=2' });
       res.end();

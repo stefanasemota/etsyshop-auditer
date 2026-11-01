@@ -110,20 +110,62 @@ export class EtsyClient {
     return tokenData;
   }
 
-  async syncLiveShop(shopId) {
+  async resolveShopInfo(shopInput = '') {
+    const cleaned = String(shopInput || '')
+      .trim()
+      .replace(/^https?:\/\/(www\.)?etsy\.com\/shop\//i, '')
+      .split(/[/?#]/)[0];
+
+    const headers = {
+      'x-api-key': this.clientId,
+      Authorization: `Bearer ${this.accessToken}`
+    };
+
+    if (/^\d+$/.test(cleaned)) {
+      const res = await this.fetchImpl(`${ETSY_API_BASE}/shops/${cleaned}`, { headers });
+      if (res.ok) return res.json();
+      return { shop_id: Number(cleaned), shop_name: `EtsyShop-${cleaned}` };
+    }
+
+    if (cleaned.length > 0) {
+      const res = await this.fetchImpl(
+        `${ETSY_API_BASE}/shops?shop_name=${encodeURIComponent(cleaned)}`,
+        { headers }
+      );
+      if (res.ok) {
+        const body = await res.json();
+        if (Array.isArray(body.results) && body.results[0]) return body.results[0];
+      }
+    }
+
+    const userId = String(this.accessToken || '').split('.')[0];
+    if (/^\d+$/.test(userId)) {
+      const res = await this.fetchImpl(`${ETSY_API_BASE}/users/${userId}/shops`, { headers });
+      if (res.ok) {
+        const body = await res.json();
+        if (body.shop_id) return body;
+        if (Array.isArray(body.results) && body.results[0]) return body.results[0];
+      }
+    }
+    throw new Error('Could not resolve Etsy shop from login or shop name.');
+  }
+
+  async syncLiveShop(shopInput) {
+    const shopMeta = await this.resolveShopInfo(shopInput);
+    const shopId = Number(shopMeta.shop_id);
     const listings = await this.fetchActiveListingsBatched(shopId);
     const normalized = {
       shop: {
-        shop_id: Number(shopId),
-        shop_name: `EtsyShop-${shopId}`,
-        title: 'Connected Etsy Shop',
-        announcement: 'Synced via Etsy REST API v3',
+        shop_id: shopId,
+        shop_name: shopMeta.shop_name || `EtsyShop-${shopId}`,
+        title: shopMeta.title || 'Connected Etsy Shop',
+        announcement: shopMeta.announcement || 'Synced via Etsy REST API v3',
         about: { story: 'Connected live shop', has_photos: true, has_video: true },
         policies: { has_shipping_policy: true, has_return_policy: true, has_faq: true }
       },
       listings: listings.map((l) => ({
         listing_id: l.listing_id,
-        shop_id: Number(shopId),
+        shop_id: shopId,
         state: l.state || 'active',
         title: l.title || '',
         description: l.description || '',
@@ -135,7 +177,7 @@ export class EtsyClient {
       }))
     };
     this.saveShopCache(normalized);
-    this.saveSession({ connected: true, mode: 'live', shopId: Number(shopId), shopName: normalized.shop.shop_name });
+    this.saveSession({ connected: true, mode: 'live', shopId, shopName: normalized.shop.shop_name });
     return normalized;
   }
 
