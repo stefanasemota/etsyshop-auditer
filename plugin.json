@@ -1,0 +1,21 @@
+{
+  "name": "etsyshop-auditer",
+  "displayName": "Etsy Shop Auditer & Optimizer",
+  "version": "1.0.0",
+  "description": "7-Phase FDD Etsy shop & listing audit engine, 13-tag & front-loaded title optimizer, atomic JSON patch generator, and Etsy REST API v3 OAuth 2.0 PKCE adapter.",
+  "logo": "assets/logo.svg",
+  "author": {
+    "name": "Stephan Asemota",
+    "url": "https://asemota.ch/"
+  },
+  "homepage": "https://github.com/stefanasemota/etsyshop-auditer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stefanasemota/etsyshop-auditer.git"
+  },
+  "suggestedPrompts": [
+    "Run etsy-optimizer: audit my Etsy shop listings against the 100-point rubric and generate atomic JSON patches",
+    "Optimize my Etsy listing titles (40-char mobile lead) and 13 multi-word tags without trademark violations",
+    "Launch the etsyshop-auditer preview diff dashboard to inspect and stage listing improvements"
+  ]
+}

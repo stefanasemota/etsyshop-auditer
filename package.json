@@ -1,0 +1,44 @@
+{
+  "name": "etsyshop-auditer",
+  "version": "1.0.0",
+  "private": false,
+  "license": "MIT",
+  "description": "Etsy v3 shop & listing review, 100-point SEO/conversion audit engine, atomic JSON patch optimizer, preview-diff dashboard, and Antigravity Plugin.",
+  "author": {
+    "name": "Stephan Asemota",
+    "email": "stefan@asemota.ch",
+    "url": "https://asemota.ch/"
+  },
+  "keywords": [
+    "node",
+    "npm",
+    "project",
+    "vibecoding tool",
+    "https://sabiai.work/",
+    "7-Phase Feature Development Workflow",
+    "etsy",
+    "etsy-api-v3",
+    "seo-audit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanasemota/etsyshop-auditer.git"
+  },
+  "type": "module",
+  "bin": {
+    "etsyshop-auditer": "./bin/etsyshop-auditer.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node ./bin/etsyshop-auditer.mjs serve",
+    "build": "node --check ./bin/etsyshop-auditer.mjs && node --test tests/etsyshop-auditer.test.mjs",
+    "test": "node --test tests/etsyshop-auditer.test.mjs",
+    "test:unit": "node --test tests/etsyshop-auditer.test.mjs",
+    "lint": "node --check ./bin/etsyshop-auditer.mjs && node --test tests/etsyshop-auditer.test.mjs"
+  },
+  "devDependencies": {
+    "vibe-coding-guardrail": "github:stefanasemota/vibe-coding-guardrail"
+  }
+}
