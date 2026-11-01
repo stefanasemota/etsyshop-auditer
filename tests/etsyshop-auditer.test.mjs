@@ -14,6 +14,7 @@ import {
 import { auditListing, auditShopCatalog } from '../src/audit/rubric.mjs';
 import { generateCatalogPatches, generateListingPatch } from '../src/optimizer/patch-engine.mjs';
 import { EtsyClient, buildAuthorizationUrl, generatePkcePair } from '../src/api/etsy-client.mjs';
+import { importEtsyCsvToShopPayload } from '../src/api/csv-importer.mjs';
 import { renderDashboardHtml } from '../src/server/dashboard.mjs';
 import { runCli } from '../bin/etsyshop-auditer.mjs';
 
@@ -152,7 +153,15 @@ test('6. Dashboard HTML renderer and CLI commands execute cleanly', () => {
     session: { connected: false }
   });
   assert.match(htmlStep1, /Step 1: Connect Your Etsy Shop/);
-  assert.match(htmlStep1, /Connect Your Shop with Etsy OAuth/);
+  assert.match(htmlStep1, /Import My Etsy CSV &amp; Run Audit/);
+
+  const csvPayload = importEtsyCsvToShopPayload(
+    'TITLE,DESCRIPTION,TAGS,MATERIALS,IMAGE1\n"Handmade Ceramic Mug","Coffee mug description","mug,coffee","stoneware,glaze","https://example.com/1.jpg"',
+    'CeramicStudio'
+  );
+  assert.equal(csvPayload.shop.shop_name, 'CeramicStudio');
+  assert.equal(csvPayload.listings.length, 1);
+  assert.equal(csvPayload.listings[0].title, 'Handmade Ceramic Mug');
 
   const htmlStep2 = renderDashboardHtml({
     auditReport: auditRes.report,

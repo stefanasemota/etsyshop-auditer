@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { URL } from 'node:url';
 import { EtsyClient, buildAuthorizationUrl, generatePkcePair } from '../api/etsy-client.mjs';
+import { importEtsyCsvToShopPayload } from '../api/csv-importer.mjs';
 import { auditShopCatalog } from '../audit/rubric.mjs';
 import { generateCatalogPatches, generateListingPatch } from '../optimizer/patch-engine.mjs';
 
@@ -16,22 +17,40 @@ function renderStepConnect(session = {}) {
   return `
   <section class="wizard-card">
     <h2>Step 1: Connect Your Etsy Shop</h2>
-    <p class="muted">Sign in with Etsy OAuth 2.0 to pull your active listings, run a health audit, and get ready-to-apply SEO &amp; conversion improvements.</p>
-    <form method="POST" action="/oauth/connect" class="stack-form">
+    <p class="muted">audit your real listings immediately using <strong>Etsy CSV Import</strong> (no API key approval needed), or connect via <strong>Etsy OAuth 2.0</strong> once your Etsy API key is active.</p>
+
+    <form method="POST" action="/oauth/import-csv" class="stack-form" style="margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid rgba(255,255,255,0.12);">
+      <h3 style="margin:0;font-size:1rem;">Option A: Import Your Real Etsy Shop CSV (No API Key Needed)</h3>
+      <small class="muted">In Etsy: <em>Shop Manager &rarr; Settings &rarr; Options &rarr; Download Data &rarr; Currently for Sale Listings CSV</em></small>
       <label>
-        <span>Etsy App Keystring (Client ID)</span>
-        <input type="text" name="client_id" value="${escapeHtml(session.clientId || '')}" placeholder="e.g. a1b2c3d4e5f6g7h8i9j0..." required />
+        <span>Shop Name</span>
+        <input type="text" name="shop_name" placeholder="e.g. MyEtsyShop" required />
       </label>
       <label>
-        <span>Your Etsy Shop Name or URL (Optional — auto-detected on login)</span>
-        <input type="text" name="shop_input" value="${escapeHtml(session.shopInput || session.shopName || '')}" placeholder="e.g. MyShopName or https://www.etsy.com/shop/MyShopName" />
+        <span>Paste Your Etsy Listings CSV Content</span>
+        <textarea name="csv_text" rows="4" placeholder="TITLE,DESCRIPTION,PRICE,CURRENCY_CODE,QUANTITY,TAGS,MATERIALS..." style="padding:0.65rem;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.25);color:inherit;font-family:monospace;font-size:0.82rem;" required></textarea>
       </label>
-      <button type="submit" class="btn-primary">Connect Your Shop with Etsy OAuth &rarr;</button>
+      <button type="submit" class="btn-primary">Import My Etsy CSV &amp; Run Audit &rarr;</button>
     </form>
-    <div class="divider"><span>OR TEST WITHOUT AN API KEY</span></div>
-    <form method="POST" action="/oauth/demo">
-      <button type="submit" class="btn-secondary">Connect Sample Etsy Shop (Demo Mode)</button>
+
+    <form method="POST" action="/oauth/demo" style="margin-bottom:1.5rem;">
+      <button type="submit" class="btn-secondary">Or Try With Sample Etsy Shop (Demo Mode) &rarr;</button>
     </form>
+
+    <details style="margin-top:0.5rem;">
+      <summary style="cursor:pointer;font-weight:600;color:var(--muted);">Option B: Connect with Etsy OAuth 2.0 (Requires Approved Active Etsy API Key)</summary>
+      <form method="POST" action="/oauth/connect" class="stack-form" style="margin-top:0.75rem;">
+        <label>
+          <span>Etsy App Keystring (Client ID — must be Active, not Pending Review)</span>
+          <input type="text" name="client_id" value="${escapeHtml(session.clientId || '')}" placeholder="e.g. a1b2c3d4e5f6g7h8i9j0..." required />
+        </label>
+        <label>
+          <span>Your Etsy Shop Name or URL (Optional)</span>
+          <input type="text" name="shop_input" value="${escapeHtml(session.shopInput || session.shopName || '')}" placeholder="e.g. MyShopName" />
+        </label>
+        <button type="submit" class="btn-secondary">Sign In with Etsy OAuth &rarr;</button>
+      </form>
+    </details>
   </section>`;
 }
 
@@ -226,6 +245,16 @@ export function createDashboardServer({ client = new EtsyClient(), defaultStrate
 
     if (req.method === 'POST' && reqUrl.pathname === '/oauth/demo') {
       client.saveSession({ connected: true, mode: 'demo', shopId: data.shop.shop_id, shopName: data.shop.shop_name });
+      res.writeHead(303, { Location: '/?step=2' });
+      res.end();
+      return;
+    }
+
+    if (req.method === 'POST' && reqUrl.pathname === '/oauth/import-csv') {
+      const body = await parseFormBody(req);
+      const payload = importEtsyCsvToShopPayload(body.csv_text, body.shop_name);
+      client.saveShopCache(payload);
+      client.saveSession({ connected: true, mode: 'csv', shopId: payload.shop.shop_id, shopName: payload.shop.shop_name });
       res.writeHead(303, { Location: '/?step=2' });
       res.end();
       return;
