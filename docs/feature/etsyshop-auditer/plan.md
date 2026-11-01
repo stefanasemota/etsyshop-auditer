@@ -24,7 +24,7 @@
 - [ ] **Phase 5: Incremental FDD Implementation (`aos-vibecode`)**
   - [x] FDD-1: `Scaffold standardized metadata and plugin manifest for an etsyshop-auditer repository`
   - [x] FDD-2: `Validate Etsy listing and shop payloads against a strict schema for an audit engine`
-  - FDD-3: `Authenticate OAuth 2.0 PKCE sessions and cache batched requests for an Etsy v3 API client`
+  - [x] FDD-3: `Authenticate OAuth 2.0 PKCE sessions and cache batched requests for an Etsy v3 API client`
   - FDD-4: `Calculate rubric scores and constraint violations of an Etsy shop catalog`
   - FDD-5: `Generate and validate atomic JSON patches for an Etsy listing optimization`
   - FDD-6: `Render side-by-side preview diffs and approval controls for a shop owner dashboard`
