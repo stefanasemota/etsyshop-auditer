@@ -4,6 +4,12 @@ Reverse-chronological ledger (newest at top, oldest at bottom) of all architectu
 
 ---
 
+### [01.11.2026] - Complete 7-Phase FDD Delivery, Quality/Security Gate & `v1.0.0` Antigravity Plugin Bundle
+- **Origin:** Human Request | Agent Proposal
+- **Context:** Completed all 7 FDD units (`FDD-1` through `FDD-7`) for `etsyshop-auditer` and executed `aos-verify` (`6/6` tests passing, zero lint warnings) and `aos-check-for-security-issues` (`0` critical findings).
+- **Decision:** Approved Phase 6 gate, logged future enhancements (`M-1` OAuth refresh token rotation and `M-2` 10 QPS pagination backoff for `>1,000` listing catalogs), generated `aos-audit.md` compliance report, and finalized `v1.0.0` for public GitHub delivery and Antigravity Plugin installation.
+- **Impact:** `decision.md`, `docs/feature/etsyshop-auditer/plan.md`, `aos-audit.md`.
+
 ### [01.11.2026] - Approve Approach C (Pragmatic Balance) Architecture, 100-Point Audit Rubric & Atomic JSON Patch Schema
 - **Origin:** Human Request | Agent Proposal
 - **Context:** `etsyshop-auditer` requires both a standalone host mini-app (Etsy REST API v3 OAuth 2.0 PKCE client, offline caching, sample fixtures, 100-point rubric evaluator, atomic JSON patch generator, and interactive preview-diff web UI/CLI) and an installable Antigravity Plugin (`plugin.json` + `.agent/skills/etsy-optimizer/SKILL.md`).
