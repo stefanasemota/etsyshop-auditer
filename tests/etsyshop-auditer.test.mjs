@@ -143,12 +143,36 @@ test('6. Dashboard HTML renderer and CLI commands execute cleanly', () => {
   assert.equal(optRes.strategy, 'seo-focus');
   assert.equal(optRes.patches.length, 3);
 
-  const html = renderDashboardHtml({
+  const htmlStep1 = renderDashboardHtml({
     auditReport: auditRes.report,
     patches: optRes.patches,
     stagedPatches: {},
-    strategy: 'seo-focus'
+    strategy: 'seo-focus',
+    step: 1,
+    session: { connected: false }
   });
-  assert.match(html, /etsyshop-auditer: AlpineWalnutCraft/);
-  assert.match(html, /Approve &amp; Stage Draft/);
+  assert.match(htmlStep1, /Step 1: Connect Your Etsy Shop/);
+  assert.match(htmlStep1, /Connect Your Shop with Etsy OAuth/);
+
+  const htmlStep2 = renderDashboardHtml({
+    auditReport: auditRes.report,
+    patches: optRes.patches,
+    stagedPatches: {},
+    strategy: 'seo-focus',
+    step: 2,
+    session: { connected: true }
+  });
+  assert.match(htmlStep2, /Step 2: Shop Audit Results for AlpineWalnutCraft/);
+  assert.match(htmlStep2, /Propose Optimizations/);
+
+  const htmlStep3 = renderDashboardHtml({
+    auditReport: auditRes.report,
+    patches: optRes.patches,
+    stagedPatches: {},
+    strategy: 'seo-focus',
+    step: 3,
+    session: { connected: true }
+  });
+  assert.match(htmlStep3, /Step 3: Proposed Optimizations/);
+  assert.match(htmlStep3, /Approve &amp; Stage Draft/);
 });

@@ -4,6 +4,12 @@ Reverse-chronological ledger (newest at top, oldest at bottom) of all architectu
 
 ---
 
+### [01.11.2026] - Implement 3-Step Guided OAuth Wizard UX & Move Repository to `/Users/aostefan/Developer/etsyshop-auditer`
+- **Origin:** Human Request | Agent Proposal
+- **Context:** Opening the dashboard directly to a dense wall of technical diffs was overwhelming; the user requested a clear 3-step guided flow (`1. Connect Your Shop` via Etsy OAuth 2.0 or Demo Mode &rarr; `2. Audit Shop Overview` &rarr; `3. Propose & Apply Optimizations`) and moved the project to `/Users/aostefan/Developer/etsyshop-auditer`.
+- **Decision:** Adopted Approach C (Server-Driven 3-Step Wizard + Full PKCE Session & Callback Handler in `src/api/etsy-client.mjs` and `src/server/dashboard.mjs`), allowing users to paste their Etsy Keystring or connect via Etsy OAuth 2.0 (`POST /oauth/connect`, `GET /oauth/callback`), inspect a plain-English Shop Audit Summary (`?step=2`), and review clean Proposed Optimizations (`?step=3`).
+- **Impact:** `src/api/etsy-client.mjs`, `src/server/dashboard.mjs`, `tests/etsyshop-auditer.test.mjs`, `README.md`, `dev.md`, `decision.md`, `docs/feature/guided-oauth-onboarding/plan.md`.
+
 ### [01.11.2026] - Complete 7-Phase FDD Delivery, Quality/Security Gate & `v1.0.0` Antigravity Plugin Bundle
 - **Origin:** Human Request | Agent Proposal
 - **Context:** Completed all 7 FDD units (`FDD-1` through `FDD-7`) for `etsyshop-auditer` and executed `aos-verify` (`6/6` tests passing, zero lint warnings) and `aos-check-for-security-issues` (`0` critical findings).

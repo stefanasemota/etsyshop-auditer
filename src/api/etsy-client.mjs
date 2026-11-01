@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_FIXTURE_PATH = path.resolve(__dirname, '../../fixtures/sample-shop.json');
 const DEFAULT_CACHE_DIR = path.resolve(__dirname, '../../.cache');
 const ETSY_API_BASE = 'https://openapi.etsy.com/v3/application';
+const ETSY_TOKEN_URL = 'https://api.etsy.com/v3/public/oauth/token';
 
 export function generatePkcePair() {
   const codeVerifier = crypto.randomBytes(32).toString('base64url');
@@ -19,7 +20,7 @@ export function generatePkcePair() {
 export function buildAuthorizationUrl({
   clientId,
   redirectUri = 'http://localhost:4321/oauth/callback',
-  scopes = ['listings_r', 'shops_r'],
+  scopes = ['listings_r', 'shops_r', 'listings_w', 'shops_w'],
   state,
   codeChallenge
 }) {
@@ -58,9 +59,91 @@ export class EtsyClient {
     }
   }
 
-  loadShopData({ shopId = 48291044, preferCache = true } = {}) {
+  getSession() {
+    const sessionFile = path.join(this.cacheDir, 'oauth-session.json');
+    if (!fs.existsSync(sessionFile)) {
+      return { connected: false, mode: null, clientId: this.clientId || '' };
+    }
+    return JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
+  }
+
+  saveSession(sessionUpdate) {
     this.ensureCacheDir();
-    const cacheFile = path.join(this.cacheDir, `shop-${shopId}.json`);
+    const sessionFile = path.join(this.cacheDir, 'oauth-session.json');
+    const merged = { ...this.getSession(), ...sessionUpdate, updatedAt: new Date().toISOString() };
+    fs.writeFileSync(sessionFile, JSON.stringify(merged, null, 2), 'utf8');
+    if (merged.clientId) this.clientId = merged.clientId;
+    if (merged.accessToken) this.accessToken = merged.accessToken;
+    return merged;
+  }
+
+  clearSession() {
+    const sessionFile = path.join(this.cacheDir, 'oauth-session.json');
+    if (fs.existsSync(sessionFile)) fs.unlinkSync(sessionFile);
+  }
+
+  async exchangeOAuthCode({ code, codeVerifier, clientId = this.clientId, redirectUri = 'http://localhost:4321/oauth/callback' }) {
+    const res = await this.fetchImpl(ETSY_TOKEN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        code,
+        code_verifier: codeVerifier
+      }).toString()
+    });
+    if (!res.ok) {
+      throw new Error(`Etsy OAuth token exchange failed (${res.status})`);
+    }
+    const tokenData = await res.json();
+    const userId = String(tokenData.access_token || '').split('.')[0];
+    this.saveSession({
+      connected: true,
+      mode: 'live',
+      clientId,
+      accessToken: tokenData.access_token,
+      refreshToken: tokenData.refresh_token,
+      userId
+    });
+    return tokenData;
+  }
+
+  async syncLiveShop(shopId) {
+    const listings = await this.fetchActiveListingsBatched(shopId);
+    const normalized = {
+      shop: {
+        shop_id: Number(shopId),
+        shop_name: `EtsyShop-${shopId}`,
+        title: 'Connected Etsy Shop',
+        announcement: 'Synced via Etsy REST API v3',
+        about: { story: 'Connected live shop', has_photos: true, has_video: true },
+        policies: { has_shipping_policy: true, has_return_policy: true, has_faq: true }
+      },
+      listings: listings.map((l) => ({
+        listing_id: l.listing_id,
+        shop_id: Number(shopId),
+        state: l.state || 'active',
+        title: l.title || '',
+        description: l.description || '',
+        tags: Array.isArray(l.tags) ? l.tags : [],
+        materials: Array.isArray(l.materials) ? l.materials : [],
+        image_count: Array.isArray(l.images) ? l.images.length : Number(l.image_count || 5),
+        has_video: Boolean(l.has_video),
+        attributes: l.attributes || { primary_color: 'Primary' }
+      }))
+    };
+    this.saveShopCache(normalized);
+    this.saveSession({ connected: true, mode: 'live', shopId: Number(shopId), shopName: normalized.shop.shop_name });
+    return normalized;
+  }
+
+  loadShopData({ shopId, preferCache = true } = {}) {
+    this.ensureCacheDir();
+    const session = this.getSession();
+    const resolvedShopId = shopId || session.shopId || 48291044;
+    const cacheFile = path.join(this.cacheDir, `shop-${resolvedShopId}.json`);
     if (preferCache && fs.existsSync(cacheFile)) {
       const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
       validateShopPayload(cached);
